@@ -1,0 +1,6 @@
+# Coding parameters
+TARGETKIND = USER
+NUMCEPS = 6
+TARGETRATE = 100000    # 10 ms per frame
+SAVECOMPRESSED = F      # F because data is not compressed
+SAVEWITHCRC = T
