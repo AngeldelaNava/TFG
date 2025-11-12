@@ -1,5 +1,5 @@
 ~o <VecSize> 6 <USER>
-~h "proto"
+~h "proto_4_states"
 <BeginHMM>
  <NumStates> 4
  <State> 2
