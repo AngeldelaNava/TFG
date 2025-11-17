@@ -1,0 +1,8 @@
+====================== HTK Results Analysis =======================
+  Date: Mon Nov 17 12:33:08 2025
+  Ref : ./trainings/Train06/folds/fold08/test06_state08.mlf
+  Rec : >sults/results_5_states/Group_06/Group06_08/HVite/recout06_state08.mlf
+------------------------ Overall Results --------------------------
+SENT: %Correct=100.00 [H=33, S=0, N=33]
+WORD: %Corr=100.00, Acc=100.00 [H=33, D=0, S=0, I=0, N=33]
+===================================================================
