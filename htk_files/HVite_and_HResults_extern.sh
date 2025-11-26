@@ -19,6 +19,8 @@ for STATES in 3 4 5; do
     HMMDEFS_FILE="${MODELS_ROOT}/Group_${OUTER}/hmm6/hmmdefs"
     HVITE_OUT_DIR="${RESULTS_ROOT}/Group_${OUTER}/HVite"
     HRESULTS_OUT_DIR="${RESULTS_ROOT}/Group_${OUTER}/HResults"
+    TEST_SCP="${BASE_DIR}/Train${OUTER}/test${OUTER}.scp"
+    TEST_MLF="${BASE_DIR}/Train${OUTER}/test${OUTER}.mlf"
     mkdir -p "$HVITE_OUT_DIR"
     mkdir -p "$HRESULTS_OUT_DIR"
     RECOUT_FILE="${HVITE_OUT_DIR}/recout${OUTER}.mlf"
