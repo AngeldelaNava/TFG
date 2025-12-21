@@ -1,0 +1,26 @@
+~o <VecSize> 2 <USER>
+~h "proto_5_states"
+<BeginHMM>
+ <NumStates> 5
+ <State> 2
+    <Mean> 2
+      0.0 0.0
+    <Variance> 2
+      1.0 1.0
+ <State> 3
+    <Mean> 2
+      0.0 0.0
+    <Variance> 2
+      1.0 1.0
+ <State> 4
+    <Mean> 2
+      0.0 0.0
+    <Variance> 2
+      1.0 1.0
+ <TransP> 5
+  0.0 1.0 0.0 0.0 0.0
+  0.0 0.6 0.4 0.0 0.0
+  0.0 0.0 0.6 0.4 0.0
+  0.0 0.0 0.0 0.7 0.3
+  0.0 0.0 0.0 0.0 1.0
+<EndHMM>
