@@ -1,0 +1,91 @@
+% ================== CONFIGURACIÓN GLOBAL ==================
+set(groot, 'defaultTextInterpreter', 'none');
+set(groot, 'defaultLegendInterpreter', 'none');
+set(groot, 'defaultAxesTickLabelInterpreter', 'none');
+set(groot, 'DefaultFigureRenderer', 'painters');
+
+% Ruta del script actual
+scriptPath = fileparts(mfilename('fullpath'));
+
+% Carpetas de entrada y salida
+dataDir  = fullfile(scriptPath, 'data');
+plotsDir = fullfile(scriptPath, 'plots');
+
+% Crear carpeta plots si no existe
+if ~exist(plotsDir, 'dir')
+    mkdir(plotsDir);
+end
+
+% Listar archivos HTK
+htkFiles = dir(fullfile(dataDir, '*.htk'));
+assert(~isempty(htkFiles), 'No se encontraron archivos HTK en data/');
+
+% Nombres de columnas (orden fijo)
+varNames = {
+    'ROM'
+    'Biceps_EMG'
+    'Triceps_EMG'
+    'Speed'
+    'Acceleration'
+    'Jerk'
+};
+
+% ================== LOOP PRINCIPAL ==================
+for k = 1:numel(htkFiles)
+
+    filename = fullfile(dataDir, htkFiles(k).name);
+
+    % Leer HTK
+    [data, header] = readHTK(filename);
+
+    % Validación básica
+    if size(data,2) ~= numel(varNames)
+        warning('Archivo %s ignorado (columnas = %d)', ...
+                htkFiles(k).name, size(data,2));
+        continue
+    end
+
+    % Crear table
+    df = array2table(data, 'VariableNames', varNames);
+    x = 1:height(df);
+
+    % Crear figura invisible
+    fig = figure('Visible','off', 'Units','pixels', 'Position',[100 100 1000 600]);
+
+    % Layout eficiente
+    t = tiledlayout(fig, 3, 1, 'TileSpacing','compact', 'Padding','compact');
+
+    % ---------- Plot 1: ROM y derivadas ----------
+    nexttile
+    plot(x, df{:,{'ROM','Speed','Acceleration'}}, 'LineWidth', 1)
+    title('ROM and derivatives')
+    ylabel('Value')
+    legend({'ROM','Speed','Acceleration'}, 'Location','best')
+    % ---------- Plot 2: ROM y derivadas ----------
+    nexttile
+    plot(x, df{:,{'ROM','Speed','Acceleration','Jerk'}}, 'LineWidth', 1)
+    title('ROM and derivatives')
+    ylabel('Value')
+    legend({'ROM','Speed','Acceleration','Jerk'}, 'Location','best')
+
+    % ---------- Plot 3: EMG ----------
+    nexttile
+    plot(x, df{:,{'Biceps_EMG','Triceps_EMG'}}, 'LineWidth', 1)
+    title('EMG signals')
+    xlabel('Sample index')
+    ylabel('EMG')
+    legend({'Biceps EMG', 'Triceps EMG'}, 'Location','best')
+
+    % Guardar figura
+    [~, baseName, ~] = fileparts(htkFiles(k).name);
+    outFile = fullfile(plotsDir, [baseName '.png']);
+
+    drawnow
+    exportgraphics(fig, outFile, 'Resolution', 150);
+
+    % Cerrar figura para liberar memoria
+    clf(fig)
+    close(fig)
+end
+
+disp('✔️ Todas las figuras se han guardado en la carpeta plots/');
