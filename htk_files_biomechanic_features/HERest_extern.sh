@@ -12,30 +12,28 @@ if [ ! -f "$CLASSES_FILE" ]; then
 fi
 
 for TRAIN_INDEX in 1 2 3 4 5 6; do
-  for STATES in 3 4 5; do
-    RESULT_ROOT="${MODELS_DIR}/models_${STATES}_states"
+  RESULT_ROOT="${MODELS_DIR}/models_3_states"
 
-    echo "==========================================="
-    echo " Ejecutando HERest nº ${TRAIN_INDEX} para ${STATES} estados"
-    echo "==========================================="
+  echo "==========================================="
+  echo " Ejecutando HERest nº ${TRAIN_INDEX} para 3 estados"
+  echo "==========================================="
 
-    for OUTER in {01..10}; do
-      TRAIN_SCP="${BASE_DIR}/Train${OUTER}/Train${OUTER}.scp"
-      TRAIN_MLF="${BASE_DIR}/Train${OUTER}/Train${OUTER}.mlf"
-      PREVIOUS_FOLDER=$((TRAIN_INDEX - 1))
-      PREVIOUS_DIR="${RESULT_ROOT}/Group_${OUTER}/hmm${PREVIOUS_FOLDER}"
-      NEW_DIR="${RESULT_ROOT}/Group_${OUTER}/hmm${TRAIN_INDEX}"
+  for OUTER in {01..10}; do
+    TRAIN_SCP="${BASE_DIR}/Train${OUTER}/Train${OUTER}.scp"
+    TRAIN_MLF="${BASE_DIR}/Train${OUTER}/Train${OUTER}.mlf"
+    PREVIOUS_FOLDER=$((TRAIN_INDEX - 1))
+    PREVIOUS_DIR="${RESULT_ROOT}/Group_${OUTER}/hmm${PREVIOUS_FOLDER}"
+    NEW_DIR="${RESULT_ROOT}/Group_${OUTER}/hmm${TRAIN_INDEX}"
 
-      mkdir -p "$NEW_DIR"
+    mkdir -p "$NEW_DIR"
 
-      echo "[HERest] nº ${TRAIN_INDEX} Fold=${OUTER} (${STATES} estados)"
+    echo "[HERest] nº ${TRAIN_INDEX} Fold=${OUTER} (3 estados)"
 
-      HERest -S "$TRAIN_SCP" \
-            -I "$TRAIN_MLF" \
-            -H "${PREVIOUS_DIR}/macros" -H "${PREVIOUS_DIR}/hmmdefs" \
-            -M "$NEW_DIR" \
-            "$CLASSES_FILE"
-    done
+    HERest -S "$TRAIN_SCP" \
+          -I "$TRAIN_MLF" \
+          -H "${PREVIOUS_DIR}/macros" -H "${PREVIOUS_DIR}/hmmdefs" \
+          -M "$NEW_DIR" \
+          "$CLASSES_FILE"
   done
 done
 

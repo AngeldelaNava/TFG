@@ -32,7 +32,7 @@ for STATES in 3 4 5; do
       } >> "$hmmdefs"
     done < "$CLASSES_FILE"
 
-    echo "~o <VecSize> 6<USER><DIAGC>" > "$macros"
+    echo "~o <VecSize> 2<USER><DIAGC>" > "$macros"
     cat "${OUT_DIR}/vFloors" >> "$macros"
   done
 done
