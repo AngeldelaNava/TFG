@@ -1,0 +1,3 @@
+$grade = SegundoESO | SegundoPRIMARIA | QuintoPRIMARIA;
+
+( $grade )

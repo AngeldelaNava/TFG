@@ -1,0 +1,8 @@
+====================== HTK Results Analysis =======================
+  Date: Thu May 21 20:59:00 2026
+  Ref : ./trainings/Train04/folds/fold10/test04_state10.mlf
+  Rec : >s_5_states/Group_04/Group04_10/5_gaussians/HVite/recout04_state10.mlf
+------------------------ Overall Results --------------------------
+SENT: %Correct=51.85 [H=14, S=13, N=27]
+WORD: %Corr=51.85, Acc=51.85 [H=14, D=0, S=13, I=0, N=27]
+===================================================================

@@ -18,7 +18,7 @@ for STATES in 3 4 5; do
   for OUTER in {01..10}; do
     for INNER in {01..10}; do
       TRAIN_SCP="${BASE_DIR}/Train${OUTER}/folds/fold${INNER}/Train${OUTER}_state${INNER}.scp"
-      OUT_DIR="${RESULT_ROOT}/Group_${OUTER}/Group${OUTER}_${INNER}/hmm0"
+      OUT_DIR="${RESULT_ROOT}/Group_${OUTER}/Group${OUTER}_${INNER}/hmm0_1"
 
       mkdir -p "$OUT_DIR"
       echo ">>> HCompV: Train${OUTER}_state${INNER} (${STATES} estados)"
