@@ -6,17 +6,70 @@ BASE_DIR="./trainings"
 MODELS_DIR="./models"
 CLASSES_FILE="./classes"
 
-for STATES in 3 4 5; do
-  PROTO="proto_${STATES}_states"
-  RESULT_ROOT="${MODELS_DIR}/models_${STATES}_states"
+declare -A group01=(
+  [group]="01"
+  [states]="4"
+)
 
-  echo "==========================================="
-  echo " Ejecutando HCompV para ${STATES} estados"
-  echo "==========================================="
+declare -A group02=(
+  [group]="02"
+  [states]="3"
+)
 
-  for OUTER in {01..10}; do
+declare -A group03=(
+  [group]="03"
+  [states]="5 6 7"
+)
+
+declare -A group04=(
+  [group]="04"
+  [states]="3"
+)
+
+declare -A group05=(
+  [group]="05"
+  [states]="5 6 7"
+)
+
+declare -A group06=(
+  [group]="06"
+  [states]="5 6 7"
+)
+
+declare -A group07=(
+  [group]="07"
+  [states]="4"
+)
+
+declare -A group08=(
+  [group]="08"
+  [states]="4"
+)
+
+declare -A group09=(
+  [group]="09"
+  [states]="5 6 7"
+)
+
+declare -A group10=(
+  [group]="10"
+  [states]="4"
+)
+
+group_list=(group01 group02 group03 group04 group05 group06 group07 group08 group09 group10)
+
+for GROUP in "${group_list[@]}"; do
+  declare -n ref=$GROUP
+  read -ra states_array <<< "${ref[states]}"
+  for STATES in ${states_array[@]}; do
+    PROTO="proto_${STATES}_states"
+    RESULT_ROOT="${MODELS_DIR}/models_${STATES}_states"
+    OUTER=${ref[group]}
+    echo "==============================================="
+    echo " Ejecutando HCompV para el grupo ${OUTER} (${STATES} estados)"
+    echo "==============================================="
     TRAIN_SCP="${BASE_DIR}/Train${OUTER}/Train${OUTER}.scp"
-    OUT_DIR="${RESULT_ROOT}/Group_${OUTER}/hmm0"
+    OUT_DIR="${RESULT_ROOT}/Group_${OUTER}/hmm0_1"
 
     mkdir -p "$OUT_DIR"
     echo ">>> HCompV: Train${OUTER} (${STATES} estados)"
