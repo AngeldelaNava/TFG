@@ -13,7 +13,7 @@ if [ ! -f "$GRADES" ]; then
     HParse grades.gram "$GRADES"
 fi
 
-for STATES in 8 9 10 11 12; do
+for STATES in 13 14 15; do
   MODELS_ROOT="${MODELS_DIR}/models_${STATES}_states"
   RESULTS_ROOT="${RESULTS_DIR}/results_${STATES}_states"
   echo "============================================"

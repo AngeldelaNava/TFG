@@ -15,7 +15,7 @@ fi
 # === HERest: Primer reentrenamiento de modelos ===
 for GAUSSIAN in {1..15}; do
   for TRAIN_INDEX in 1 2 3 4 5 6; do
-    for STATES in 8 9 10 11 12; do
+    for STATES in 13 14 15; do
       RESULT_ROOT="${MODELS_DIR}/models_${STATES}_states"
 
       echo "==========================================="
@@ -46,7 +46,7 @@ for GAUSSIAN in {1..15}; do
     echo "==========================================="
     echo "Creando Gaussiana $((GAUSSIAN + 1))"
     echo "==========================================="
-    for STATES in 8 9 10 11 12; do
+    for STATES in 13 14 15; do
       for INNER in {01..10}; do
         RESULT_ROOT="${MODELS_DIR}/models_${STATES}_states"
         HMMDEFS="${RESULT_ROOT}/Group_03/Group03_${INNER}/hmm6_${GAUSSIAN}/hmmdefs"
