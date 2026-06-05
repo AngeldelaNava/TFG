@@ -18,7 +18,7 @@ declare -A group02=(
 
 declare -A group03=(
   [group]="03"
-  [states]="5 6 7"
+  [states]="12"
 )
 
 declare -A group04=(
@@ -28,12 +28,12 @@ declare -A group04=(
 
 declare -A group05=(
   [group]="05"
-  [states]="5 6 7"
+  [states]="5"
 )
 
 declare -A group06=(
   [group]="06"
-  [states]="5 6 7"
+  [states]="6"
 )
 
 declare -A group07=(
@@ -48,7 +48,7 @@ declare -A group08=(
 
 declare -A group09=(
   [group]="09"
-  [states]="5 6 7"
+  [states]="5"
 )
 
 declare -A group10=(
@@ -60,34 +60,32 @@ group_list=(group01 group02 group03 group04 group05 group06 group07 group08 grou
 
 for GROUP in "${group_list[@]}"; do
   declare -n ref=$GROUP
-  read -ra states_array <<< "${ref[states]}"
-  for STATES in ${states_array[@]}; do
-    PROTO="proto_${STATES}_states"
-    RESULT_ROOT="${MODELS_DIR}/models_${STATES}_states"
-    OUTER=${ref[group]}
-    echo "==============================================="
-    echo " Ejecutando HCompV para el grupo ${OUTER} (${STATES} estados)"
-    echo "==============================================="
-    TRAIN_SCP="${BASE_DIR}/Train${OUTER}/Train${OUTER}.scp"
-    OUT_DIR="${RESULT_ROOT}/Group_${OUTER}/hmm0_1"
+  STATES="${ref[states]}"
+  PROTO="proto_${STATES}_states"
+  RESULT_ROOT="${MODELS_DIR}/models_${STATES}_states"
+  OUTER=${ref[group]}
+  echo "==============================================="
+  echo " Ejecutando HCompV para el grupo ${OUTER} (${STATES} estados)"
+  echo "==============================================="
+  TRAIN_SCP="${BASE_DIR}/Train${OUTER}/Train${OUTER}.scp"
+  OUT_DIR="${RESULT_ROOT}/Group_${OUTER}/hmm0_1"
 
-    mkdir -p "$OUT_DIR"
-    echo ">>> HCompV: Train${OUTER} (${STATES} estados)"
-    HCompV -f 0.01 -m -S "$TRAIN_SCP" -M "$OUT_DIR" "./$PROTO"
-    bloque=$(awk '/<BEGINHMM>/{flag=1} flag' "${OUT_DIR}/$PROTO")
-    hmmdefs="${OUT_DIR}/hmmdefs"
-    macros="${OUT_DIR}/macros"
-    while read -r nombre; do
-      {
-        echo "~h \"$nombre\""
-        printf '%s\n' "$bloque"
-        echo ""
-      } >> "$hmmdefs"
-    done < "$CLASSES_FILE"
+  mkdir -p "$OUT_DIR"
+  echo ">>> HCompV: Train${OUTER} (${STATES} estados)"
+  HCompV -f 0.01 -m -S "$TRAIN_SCP" -M "$OUT_DIR" "./$PROTO"
+  bloque=$(awk '/<BEGINHMM>/{flag=1} flag' "${OUT_DIR}/$PROTO")
+  hmmdefs="${OUT_DIR}/hmmdefs"
+  macros="${OUT_DIR}/macros"
+  while read -r nombre; do
+    {
+      echo "~h \"$nombre\""
+      printf '%s\n' "$bloque"
+      echo ""
+    } >> "$hmmdefs"
+  done < "$CLASSES_FILE"
 
-    echo "~o <VecSize> 6<USER><DIAGC>" > "$macros"
-    cat "${OUT_DIR}/vFloors" >> "$macros"
-  done
+  echo "~o <VecSize> 6<USER><DIAGC>" > "$macros"
+  cat "${OUT_DIR}/vFloors" >> "$macros"
 done
 
 echo "HCompV completado para todos los estados."

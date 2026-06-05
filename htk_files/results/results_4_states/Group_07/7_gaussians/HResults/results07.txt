@@ -1,5 +1,5 @@
 ====================== HTK Results Analysis =======================
-  Date: Wed May 27 20:36:15 2026
+  Date: Fri Jun  5 12:55:38 2026
   Ref : ./trainings/Train07/test07.mlf
   Rec : ./results/results_4_states/Group_07/7_gaussians/HVite/recout07.mlf
 ------------------------ Overall Results --------------------------

@@ -27,26 +27,26 @@ declare -A group02=(
 
 declare -A group03=(
   [group]="03"
-  [gaussians]="15"
-  [states]="5 6 7"
+  [gaussians]="14"
+  [states]="12"
 )
 
 declare -A group04=(
   [group]="04"
-  [gaussians]="15"
+  [gaussians]="10"
   [states]="3"
 )
 
 declare -A group05=(
   [group]="05"
-  [gaussians]="15"
-  [states]="5 6 7"
+  [gaussians]="10"
+  [states]="5"
 )
 
 declare -A group06=(
   [group]="06"
-  [gaussians]="5"
-  [states]="5 6 7"
+  [gaussians]="1"
+  [states]="6"
 )
 
 declare -A group07=(
@@ -57,14 +57,14 @@ declare -A group07=(
 
 declare -A group08=(
   [group]="08"
-  [gaussians]="15"
+  [gaussians]="13"
   [states]="4"
 )
 
 declare -A group09=(
   [group]="09"
-  [gaussians]="15"
-  [states]="5 6 7"
+  [gaussians]="10"
+  [states]="5"
 )
 
 declare -A group10=(
@@ -77,46 +77,44 @@ group_list=(group01 group02 group03 group04 group05 group06 group07 group08 grou
 
 for GROUP in "${group_list[@]}"; do
   declare -n ref=$GROUP
-  read -ra states_array <<< "${ref[states]}"
-  for STATES in ${states_array[@]}; do
-    RESULT_ROOT="${MODELS_DIR}/models_${STATES}_states"
-    OUTER=${ref[group]}
-    TRAIN_SCP="${BASE_DIR}/Train${OUTER}/Train${OUTER}.scp"
-    TRAIN_MLF="${BASE_DIR}/Train${OUTER}/Train${OUTER}.mlf"
-    for (( g=1; g<=${ref[gaussians]}; g++)); do
-      for TRAIN_INDEX in 1 2 3 4 5 6; do
-        PREVIOUS_FOLDER=$((TRAIN_INDEX - 1))
-        PREVIOUS_DIR="${RESULT_ROOT}/Group_${OUTER}/hmm${PREVIOUS_FOLDER}_${g}"
-        NEW_DIR="${RESULT_ROOT}/Group_${OUTER}/hmm${TRAIN_INDEX}_${g}"
+  STATES="${ref[states]}"
+  RESULT_ROOT="${MODELS_DIR}/models_${STATES}_states"
+  OUTER=${ref[group]}
+  TRAIN_SCP="${BASE_DIR}/Train${OUTER}/Train${OUTER}.scp"
+  TRAIN_MLF="${BASE_DIR}/Train${OUTER}/Train${OUTER}.mlf"
+  for (( g=1; g<=${ref[gaussians]}; g++)); do
+    for TRAIN_INDEX in 1 2 3 4 5 6; do
+      PREVIOUS_FOLDER=$((TRAIN_INDEX - 1))
+      PREVIOUS_DIR="${RESULT_ROOT}/Group_${OUTER}/hmm${PREVIOUS_FOLDER}_${g}"
+      NEW_DIR="${RESULT_ROOT}/Group_${OUTER}/hmm${TRAIN_INDEX}_${g}"
 
-        mkdir -p "$NEW_DIR"
+      mkdir -p "$NEW_DIR"
 
-        echo "[HERest] nº ${TRAIN_INDEX} Fold=${OUTER} (${STATES} estados, ${g} gaussians)"
+      echo "[HERest] nº ${TRAIN_INDEX} Fold=${OUTER} (${STATES} estados, ${g} gaussians)"
 
-        HERest -S "$TRAIN_SCP" \
-              -I "$TRAIN_MLF" \
-              -H "${PREVIOUS_DIR}/macros" -H "${PREVIOUS_DIR}/hmmdefs" \
-              -M "$NEW_DIR" \
-              "$CLASSES_FILE"
-      done
-      if (( g < ref[gaussians] )); then
-        echo "===================="
-        echo "Creando Gaussiana $((g + 1))"
-        echo "===================="
-        HMMDEFS="${RESULT_ROOT}/Group_${OUTER}/hmm6_${g}/hmmdefs"
-        MACROS="${RESULT_ROOT}/Group_${OUTER}/hmm6_${g}/macros"
-        NEW_FOLDER="${RESULT_ROOT}/Group_${OUTER}/hmm0_$((g + 1))"
-        ADD_GAUSSIAN_FILE="${ADD_GAUSSIAN}/mix$((g + 1))_${STATES}_states.hed"
-
-        mkdir -p "$NEW_FOLDER"
-        echo ">>> HHEd: Group ${OUTER} (${STATES} estados)"
-        HHEd -H "$HMMDEFS" \
-            -H "$MACROS" \
-            -M "$NEW_FOLDER" \
-            "$ADD_GAUSSIAN_FILE" \
+      HERest -S "$TRAIN_SCP" \
+            -I "$TRAIN_MLF" \
+            -H "${PREVIOUS_DIR}/macros" -H "${PREVIOUS_DIR}/hmmdefs" \
+            -M "$NEW_DIR" \
             "$CLASSES_FILE"
-      fi
     done
+    if (( g < ref[gaussians] )); then
+      echo "===================="
+      echo "Creando Gaussiana $((g + 1))"
+      echo "===================="
+      HMMDEFS="${RESULT_ROOT}/Group_${OUTER}/hmm6_${g}/hmmdefs"
+      MACROS="${RESULT_ROOT}/Group_${OUTER}/hmm6_${g}/macros"
+      NEW_FOLDER="${RESULT_ROOT}/Group_${OUTER}/hmm0_$((g + 1))"
+      ADD_GAUSSIAN_FILE="${ADD_GAUSSIAN}/mix$((g + 1))_${STATES}_states.hed"
+
+      mkdir -p "$NEW_FOLDER"
+      echo ">>> HHEd: Group ${OUTER} (${STATES} estados)"
+      HHEd -H "$HMMDEFS" \
+          -H "$MACROS" \
+          -M "$NEW_FOLDER" \
+          "$ADD_GAUSSIAN_FILE" \
+          "$CLASSES_FILE"
+    fi
   done
 done
 
