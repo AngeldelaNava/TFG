@@ -7,7 +7,7 @@ MODELS_DIR="./models"
 CLASSES_FILE="./classes"
 
 # === HCompV: Inicialización global ===
-for STATES in 13 14 15; do
+for STATES in 8 9 10 11 12 13 14 15; do
   PROTO="proto_${STATES}_states"
   RESULT_ROOT="${MODELS_DIR}/models_${STATES}_states"
 
